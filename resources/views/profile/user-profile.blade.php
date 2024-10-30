@@ -1,3 +1,4 @@
+<x-app-layout>
 <div class="container mx-auto p-4">
     <div class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center space-y-4 md:flex-row md:space-x-6">
         <!-- Photo de profil ronde -->
@@ -56,3 +57,5 @@
         </button>
     </div>
 </div>
+
+</x-app-layout>

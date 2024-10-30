@@ -25,8 +25,6 @@ Route::middleware('auth')->group(function () {
     });
 
 });
-
-
 // Nouvelles routes pour les posts
 Route::middleware('auth')->group(function () {
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
@@ -37,24 +35,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
 
-
-
-
 });
-
 // Nouvelles routes pour les followers
-// Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::post('/follow/{user}', [FollowController::class, 'store'])->name('follow.store');
     Route::delete('/unfollow/{user}', [FollowController::class, 'destroy'])->name('follow.destroy');
-// });
+});
 
-
-
+Route::get('/test-follow', function () {
+    return view('profile.partials.test-follow');
+});
 
 // Nouvelle route pour la recherche
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
-
-
 
 // Routes d'authentification Breeze
 require __DIR__.'/auth.php';
