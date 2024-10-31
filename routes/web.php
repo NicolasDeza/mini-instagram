@@ -6,6 +6,7 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\FeedController;
 // Page d'accueil
 Route::get('/', function () {
     return view('welcome');
@@ -36,18 +37,29 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
 
 });
+
 // Nouvelles routes pour les followers
 Route::middleware('auth')->group(function () {
     Route::post('/follow/{user}', [FollowController::class, 'store'])->name('follow.store');
     Route::delete('/unfollow/{user}', [FollowController::class, 'destroy'])->name('follow.destroy');
 });
 
-Route::get('/test-follow', function () {
-    return view('profile.partials.test-follow');
+// Routes pour le fil d'actualité
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [FeedController::class, 'index'])->name('home');
+    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 });
+
+
+
 
 // Nouvelle route pour la recherche
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
-// Routes d'authentification Breeze
+
+
+Route::get('/test-follow', function () {
+    return view('profile.partials.test-follow');
+});
+
 require __DIR__.'/auth.php';

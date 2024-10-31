@@ -1,28 +1,19 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un nouveau post</title>
-</head>
-<body>
-    <div class="container mx-auto px-4 py-6">
-        <h1 class="text-2xl font-semibold mb-6">Créer un nouveau post</h1>
-
-        <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="mb-4">
-                <label for="caption" class="block text-sm font-medium text-gray-700">Légende</label>
-                <input type="text" name="caption" id="caption" class="mt-1 block w-full border border-gray-300 rounded-md p-2" required>
-            </div>
-
-            <div class="mb-4">
-                <label for="image_path" class="block text-sm font-medium text-gray-700">Image</label>
-                <input type="file" name="image_path" id="image_path" class="mt-1 block w-full" required>
-            </div>
-
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Publier</button>
-        </form>
+<x-app-layout>
+    <div class="container mx-auto mt-8">
+        <div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-2xl font-semibold mb-6">Créer un nouveau post</h2>
+            <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-4">
+                    <label for="caption" class="block text-sm font-medium text-gray-700">Légende</label>
+                    <textarea name="caption" id="caption" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="photo" class="block text-sm font-medium text-gray-700">Image</label>
+                    <input type="file" name="photo" id="photo" class="mt-1 block w-full text-sm text-gray-500">
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Publier</button>
+            </form>
+        </div>
     </div>
-</body>
-</html>
+</x-app-layout>

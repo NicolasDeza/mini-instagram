@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class PostController extends Controller
@@ -22,37 +23,42 @@ class PostController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('posts.create');
-    }
+{
+    return view('posts.create');
+}
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
 
-        dd(Auth::user()); // Debug pour vérifier l'authentification
-        $request->validate([
-            'caption' => 'required|string|max:255',
-            'image_path' => 'required|image|max:2048',
+        // Validation des données
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'bio' => 'nullable|string|max:255',
+            'profile_photo_path' => 'nullable|image|max:4096',
         ]);
 
-        $post = new Post();
-        $post->user_id = Auth::id();
-        $post->caption = $request->caption;
-        $post->image_path = $request->file('image_path')->store('posts', 'public');
-        $post->save();
+        // Mise à jour des informations du profil
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->bio = $validatedData['bio'] ?? $user->bio;
 
-        return redirect()->route('posts.index')->with('success', 'Post créé avec succès');
-    }
+        // Mise à jour de la photo de profil si un fichier est téléchargé
+        if ($request->hasFile('profile_photo_path') && $request->file('profile_photo_path')->isValid()) {
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
+            }
+            $user->profile_photo_path = $request->file('profile_photo_path')->store('profile_photos', 'public');
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Post $post)
-    {
-        return view('posts.show', compact('post'));
+        $user->save();
+
+        return redirect()->route('profile.edit')->with('status', 'Profil mis à jour avec succès !');
     }
 
 

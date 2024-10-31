@@ -41,35 +41,33 @@ public function show(User $user)
      */
     public function update(Request $request)
     {
-
         $user = Auth::user();
 
+        // Validation des données
         $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'bio' => 'nullable|string|max:255',
-            'profile_photo_path' => 'nullable|image|max:2048',
+            'profile_photo_path' => 'nullable|image|max:4096',
         ]);
 
+        // Mise à jour des informations du profil
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->bio = $validatedData['bio'] ?? $user->bio;
+
+        // Mise à jour de la photo de profil si un fichier est téléchargé
         if ($request->hasFile('profile_photo_path') && $request->file('profile_photo_path')->isValid()) {
-            // Supprimer l'ancienne image si elle existe
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
-
-             // LIGNE BIZARRE
-            $path = 'profile_photos/' . $request->file('profile_photo_path')->getClientOriginalName();
-            $request->file('profile_photo_path')->move(public_path('storage/profile_photos'), $path);
-            $user->profile_photo_path = 'storage/' . $path;
-
-
-            $user->profile_photo_path = $path;
+            $user->profile_photo_path = $request->file('profile_photo_path')->store('profile_photos', 'public');
         }
 
-        $user->bio = $request->input('bio', $user->bio);
         $user->save();
 
-        return redirect()->route('profile.show', ['user' => $user->id])->with('success', 'Profil mis à jour avec succès.');
+        return redirect()->route('profile.edit')->with('status', 'Profil mis à jour avec succès !');
     }
-
 
 
 
