@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 
 class PostController extends Controller
@@ -33,33 +34,40 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
-
-        // Validation des données
+        // Validation pour la création d'un post
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'bio' => 'nullable|string|max:255',
-            'profile_photo_path' => 'nullable|image|max:4096',
+            'photo' => 'required|image|max:4096',  // La photo est obligatoire et doit être une image de 4 Mo max
+            'caption' => 'nullable|string|max:255', // La légende est facultative, max 255 caractères
         ]);
 
-        // Mise à jour des informations du profil
-        $user->name = $validatedData['name'];
-        $user->email = $validatedData['email'];
-        $user->bio = $validatedData['bio'] ?? $user->bio;
+        $user = Auth::user();
 
-        // Mise à jour de la photo de profil si un fichier est téléchargé
-        if ($request->hasFile('profile_photo_path') && $request->file('profile_photo_path')->isValid()) {
-            if ($user->profile_photo_path) {
-                Storage::disk('public')->delete($user->profile_photo_path);
-            }
-            $user->profile_photo_path = $request->file('profile_photo_path')->store('profile_photos', 'public');
+        // Téléchargement de l'image avec move()
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            $filename = time() . '_' . $request->file('photo')->getClientOriginalName(); // Nom de fichier unique
+            $imagePath = 'posts/' . $filename;
+
+            // Utilisation de move() pour déplacer le fichier
+            $request->file('photo')->move(public_path('storage/posts'), $filename);
+        } else {
+            return back()->withErrors(['photo' => 'Le fichier image est invalide ou n’a pas pu être téléchargé.'])->withInput();
         }
 
-        $user->save();
+        // Création du post
+        $post = new Post();
+        $post->user_id = $user->id;
+        $post->image_path = 'storage/' . $imagePath; // Chemin accessible publiquement
+        $post->caption = $validatedData['caption'];
+        $post->save();
 
-        return redirect()->route('profile.edit')->with('status', 'Profil mis à jour avec succès !');
+        // Redirection vers le profil avec un message de succès
+        return redirect()->route('profile.show', $user->id)->with('status', 'Post publié avec succès !');
     }
+
+
+
+
+
 
 
     /**

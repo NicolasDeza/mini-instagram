@@ -1,5 +1,9 @@
 <div class="post-card">
-    <img src="{{ asset($post->image_path) }}" alt="Image du post" class="w-full h-48 object-cover rounded-lg">
+    
+    {{ dd($post->image_path) }}
+
+    <img src="{{ Storage::url($post->image_path) }}" alt="Image du post" class="w-full h-48 object-cover rounded-lg">
+
     <div class="p-4">
         <h3 class="text-lg font-bold">{{ $post->caption }}</h3>
         <p class="text-gray-600 text-sm">Posté le {{ $post->created_at->format('d M Y') }}</p>
@@ -18,4 +22,3 @@
         </form>
     </div>
 </div>
-
