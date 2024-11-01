@@ -1,6 +1,6 @@
 <div class="post-card">
-    
-    {{ dd($post->image_path) }}
+
+    @dump($post->image_path)
 
     <img src="{{ Storage::url($post->image_path) }}" alt="Image du post" class="w-full h-48 object-cover rounded-lg">
 
