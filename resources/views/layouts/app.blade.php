@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>Mini Instagram</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -16,9 +16,10 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
+            <!-- Inclure la navigation avec le logo et les liens -->
             @include('layouts.navigation')
 
-            <!-- Page Heading -->
+            <!-- En-tête de page -->
             @isset($header)
                 <header class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -27,7 +28,7 @@
                 </header>
             @endisset
 
-            <!-- Page Content -->
+            <!-- Contenu de la page -->
             <main>
                 {{ $slot }}
             </main>

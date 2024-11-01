@@ -15,10 +15,12 @@ class PostController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $posts = Post::latest()->get();
-        return view('post.index', compact('posts'));
-    }
+{
+    // Récupérer les posts pour le fil d’actualité, par exemple
+    $posts = Post::latest()->paginate(10);
+
+    return view('feed.index', compact('posts'));
+}
 
     public function show(Post $post)
     {
