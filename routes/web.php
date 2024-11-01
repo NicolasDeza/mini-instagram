@@ -9,9 +9,11 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\CommentController;
 // Page d'accueil
+// Page d'accueil
 Route::get('/', function () {
-    return view('welcome');
+    return Auth::check() ? redirect()->route('posts.index') : redirect()->route('login');
 });
+
 
 // Dashboard protégé par authentification
 Route::get('/dashboard', function () {
@@ -38,9 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 
-
 });
-
 // Nouvelles routes pour les followers
 Route::middleware('auth')->group(function () {
     Route::post('/follow/{user}', [FollowController::class, 'store'])->name('follow.store');

@@ -4,7 +4,10 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($posts as $post)
                 <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <img src="{{ asset($post->image_path) }}" alt="Image du post" class="w-full h-64 object-cover">
+                    <!-- Lien autour de l'image pour ouvrir le post individuel -->
+                    <a href="{{ route('posts.show', $post->id) }}">
+                        <img src="{{ asset($post->image_path) }}" alt="Image du post" class="w-full h-64 object-cover">
+                    </a>
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2">{{ $post->user->name }}</h3>
                         <p>{{ $post->caption }}</p>
