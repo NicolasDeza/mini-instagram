@@ -20,6 +20,10 @@ class PostController extends Controller
         return view('post.index', compact('posts'));
     }
 
+    public function show(Post $post)
+    {
+        return view('posts.show', compact('post'));
+    }
     /**
      * Show the form for creating a new resource.
      */

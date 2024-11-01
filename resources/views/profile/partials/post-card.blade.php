@@ -2,7 +2,7 @@
 
     @dump($post->image_path)
 
-    <img src="{{ Storage::url($post->image_path) }}" alt="Image du post" class="w-full h-48 object-cover rounded-lg">
+    <img src="{{ asset($post->image_path) }}" alt="Image du post" class="w-full h-48 object-cover rounded-lg">
 
     <div class="p-4">
         <h3 class="text-lg font-bold">{{ $post->caption }}</h3>

@@ -1,7 +1,8 @@
 <x-app-layout>
     <div class="container mx-auto mt-8">
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="{{ asset('storage/' . $post->photo_path) }}" alt="Image du post" class="w-full h-64 object-cover">
+            <!-- Correction du chemin de l'image -->
+            <img src="{{ asset($post->image_path) }}" alt="Image du post" class="w-full h-64 object-cover">
             <div class="p-4">
                 <h3 class="text-lg font-semibold mb-2">{{ $post->user->name }}</h3>
                 <p>{{ $post->caption }}</p>
@@ -15,6 +16,8 @@
                         <button type="submit" class="text-blue-500">Aimer</button>
                     </form>
                 </div>
+
+                <!-- Affichage des commentaires -->
                 <h4 class="text-xl font-semibold mt-8">Commentaires</h4>
                 @foreach($post->comments as $comment)
                     <div class="mt-4">
@@ -25,6 +28,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Bouton de désabonnement si l'utilisateur connecté suit l'auteur du post -->
     @if(Auth::user()->id !== $post->user->id && Auth::user()->following->contains($post->user))
         <form action="{{ route('follow.destroy', $post->user->id) }}" method="POST">
             @csrf
