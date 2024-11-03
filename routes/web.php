@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\CommentController;
-// Page d'accueil
+
 // Page d'accueil
 Route::get('/', function () {
     return Auth::check() ? redirect()->route('posts.index') : redirect()->route('login');
@@ -20,49 +20,35 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Routes pour le profil utilisateur existant
-Route::middleware('auth')->group(function () {
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
-
-});
-// Nouvelles routes pour les posts
-Route::middleware('auth')->group(function () {
-    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create')->middleware('auth');
-    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-    Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
-    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
-    Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
-    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
-
-});
-// Nouvelles routes pour les followers
-Route::middleware('auth')->group(function () {
-    Route::post('/follow/{user}', [FollowController::class, 'store'])->name('follow.store');
-    Route::delete('/unfollow/{user}', [FollowController::class, 'destroy'])->name('follow.destroy');
-});
-
-// Routes pour le fil d'actualité
 Route::middleware('auth')->group(function () {
     Route::get('/home', [FeedController::class, 'index'])->name('home');
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('/user/{user}', [ProfileController::class, 'show'])->name('user.profile');
+    Route::post('/follow/{user}', [FollowController::class, 'store'])->name('follow.store');
+    Route::delete('/unfollow/{user}', [FollowController::class, 'destroy'])->name('follow.destroy');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
 
-
-
-
-// Nouvelle route pour la recherche
-Route::get('/search', [SearchController::class, 'index'])->name('search.index');
-
-
-
-Route::get('/test-follow', function () {
-    return view('profile.partials.test-follow');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+Route::get('/search', [SearchController::class, 'index'])->name('search');
+
+
+
+
+
+
+
 
 require __DIR__.'/auth.php';

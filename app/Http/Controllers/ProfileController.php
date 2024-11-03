@@ -19,22 +19,34 @@ class ProfileController extends Controller
     $users = User::where('id', '!=', Auth::id())->get(); // Récupère tous les utilisateurs sauf l'utilisateur connecté
     return view('user-list', compact('users'));
 }
-public function show(User $user)
+public function myProfile()
 {
+
+    // Charger les relations nécessaires et trier les posts du plus récent au plus ancien
     $user->load(['posts' => function($query) {
-        $query->orderBy('created_at', 'desc'); // Classe les posts du plus récent au plus ancien
+        $query->orderBy('created_at', 'desc');
     }, 'followers', 'following']);
 
-    return view('profile.user-profile', compact('user'));
+    return view('profile.my-profile', compact('user'));
 }
+public function show(User $user)
+    {
+        // Charger les posts de l'utilisateur triés du plus récent au plus ancien
+        $user->load(['posts' => function($query) {
+            $query->orderBy('created_at', 'desc');
+        }, 'followers', 'following']);
+
+        return view('profile.user-profile', compact('user'));
+    }
+
     /**
      * Display the user's profile form.
      */
     public function edit()
-{
-    $user = Auth::user();
-    return view('profile.edit', compact('user'));
-}
+    {
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
+    }
 
     /**
      * Update the user's profile information.

@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Search;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SearchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = $request->input('query');
+
+        // Recherche des utilisateurs et des posts
+        $users = User::where('name', 'LIKE', "%{$query}%")->get();
+        $posts = Post::where('caption', 'LIKE', "%{$query}%")->get();
+
+        return view('search.results', compact('users', 'posts', 'query'));
     }
 
     /**
