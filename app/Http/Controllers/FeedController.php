@@ -10,15 +10,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class FeedController extends Controller
 {
     public function index()
-    {
-        // Récupérer les utilisateurs suivis par l'utilisateur connecté
-        $followedUserIds = Auth::user()->following()->pluck('id');
+{
+    $followingIds = Auth::user()->following->pluck('id');
+    $posts = Post::whereIn('user_id', $followingIds)
+                 ->orderBy('created_at', 'desc')
+                 ->get();
 
-        // Récupérer les posts des utilisateurs suivis, paginés par 9
-        $posts = Post::whereIn('user_id', $followedUserIds)
-                     ->orderBy('created_at', 'desc')
-                     ->paginate(9);
-
-        return view('feed.index', compact('posts'));
-    }
+    return view('feed.index', compact('posts'));
+}
 }

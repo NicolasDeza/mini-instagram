@@ -1,10 +1,9 @@
 <x-app-layout>
-    <div class="container mx-auto mt-8 px-4 ">
+    <div class="container mx-auto mt-8 px-6">
         <h1 class="text-3xl font-bold mb-6">Fil d'actualité</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($posts as $post)
                 <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <!-- Lien autour de l'image pour ouvrir le post individuel -->
                     <a href="{{ route('posts.show', $post->id) }}">
                         <img src="{{ asset($post->image_path) }}" alt="Image du post" class="w-full h-64 object-cover">
                     </a>
@@ -22,13 +21,9 @@
                 </div>
             @endforeach
         </div>
-
-        <!-- Pagination -->
-        <div class="mt-8 flex justify-center">
-            {{ $posts->links() }}
-        </div>
     </div>
 </x-app-layout>
+
 
 
 

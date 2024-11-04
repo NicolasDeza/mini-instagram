@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <!-- Titre Mini Instagram sans logo -->
-                <a href="{{ route('posts.index') }}" class="font-semibold text-xl text-gray-800">
+                <a href="{{ route('home') }}" class="font-semibold text-xl text-gray-800">
                     Mini Instagram
                 </a>
             </div>
@@ -20,10 +20,10 @@
 
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
+                <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                     Fil d'actualité
                 </x-nav-link>
-                <x-nav-link :href="route('user.profile', ['user' => Auth::user()->id])" :active="request()->routeIs('user.profile')">
+                <x-nav-link :href="route('user.profile', ['user' => Auth::id()])" :active="request()->routeIs('user.profile')">
                     Mon profil
                 </x-nav-link>
             </div>
@@ -36,7 +36,7 @@
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a 1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
@@ -72,10 +72,10 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
+            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
                 Fil d'actualité
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('profile.show', ['user' => Auth::user()->id])" :active="request()->routeIs('profile.show') && request()->route('profile.show', ['user' => Auth::user()->id])">
+            <x-responsive-nav-link :href="route('user.profile', ['user' => Auth::id()])" :active="request()->routeIs('user.profile')">
                 Mon profil
             </x-responsive-nav-link>
         </div>
@@ -100,6 +100,7 @@
         </div>
     </div>
 </nav>
+
 
 
 
