@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="container mx-auto mt-8">
+    <div class="container mx-auto mt-8 px-6">
         <div class="bg-white shadow-md rounded-lg overflow-hidden p-6">
             <div class="flex items-center">
                 <img src="{{ asset($user->profile_photo_path ? 'storage/' . $user->profile_photo_path : 'images/default-profile.png') }}" alt="Photo de profil" class="w-24 h-24 rounded-full">

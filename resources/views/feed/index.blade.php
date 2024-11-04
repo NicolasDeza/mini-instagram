@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="container mx-auto mt-8">
+    <div class="container mx-auto mt-8 px-4 ">
         <h1 class="text-3xl font-bold mb-6">Fil d'actualité</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($posts as $post)
@@ -22,8 +22,13 @@
                 </div>
             @endforeach
         </div>
-        <div class="mt-8">
+
+        <!-- Pagination -->
+        <div class="mt-8 flex justify-center">
             {{ $posts->links() }}
         </div>
     </div>
 </x-app-layout>
+
+
+

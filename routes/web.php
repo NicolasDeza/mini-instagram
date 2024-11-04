@@ -21,6 +21,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/home', [FeedController::class, 'index'])->name('home');
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('/user/{user}', [ProfileController::class, 'show'])->name('user.profile');
