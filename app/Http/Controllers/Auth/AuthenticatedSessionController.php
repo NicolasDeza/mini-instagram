@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
             $request->session()->regenerate();
 
             // Rediriger vers le feed après la connexion
-            return redirect()->route('posts.index');
+            return redirect()->route('home');
         }
 
         return back()->withErrors([
